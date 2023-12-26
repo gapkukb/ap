@@ -2,9 +2,19 @@
   <div>
     <van-tabs
       v-model="tabsActive"
-      ref="tabsRef"
+      :ellipsis="false"
       animated
+      sticky
     >
+      <template #nav-right>
+        <div style="flex: 1"></div>
+        <van-button
+          type="none"
+          icon="arrow-down"
+          class="sticky right-0 top-0"
+          @click="toggleAll(all)"
+        />
+      </template>
       <van-tab
         v-for="(tab, index) in tabs"
         :key="tab[1]"
@@ -20,7 +30,19 @@
             :title="market.betTypeName"
             :name="market.betType"
           >
-            <div v-if="collapseCacheNames.includes(market.betType)"></div>
+            <div
+              v-if="collapseCacheNames.includes(market.betType)"
+              class="detail-row"
+            >
+              <column
+                label="Home"
+                :odds="odds"
+              />
+              <column
+                label="Away"
+                :odds="odds"
+              />
+            </div>
           </van-collapse-item>
         </van-collapse>
       </van-tab>
@@ -29,9 +51,33 @@
 </template>
 <script lang="ts" setup>
 import { useDynamicCollapse, useDynamicTabs } from './hooks';
+import Column from './DetailColumn.vue';
 import data from './mock';
 import { useTabs } from './utils';
-const [collapseActiveName, collapseCacheNames] = useDynamicCollapse();
+import { ref } from 'vue';
+const [collapseActiveName, collapseCacheNames, toggleAll] = useDynamicCollapse();
 const tabs = useTabs(data.markets);
+// const tabs = Array.from({ length: 20 }).map((_, i) => [i.toString(), i]);
 const [tabsActive, tabsCache] = useDynamicTabs();
+
+const all = data.markets.map((i) => i.betType);
+toggleAll(all);
+
+const odds = ref(1.58);
+
+setTimeout(() => {
+  odds.value = 2.58;
+}, 2000);
 </script>
+
+<style lang="scss" scoped>
+.detail-row {
+  @apply grid grid-cols-[1fr_1fr] gap-2 h-[92px];
+}
+
+::v-deep {
+  .van-tab {
+    flex: none !important;
+  }
+}
+</style>

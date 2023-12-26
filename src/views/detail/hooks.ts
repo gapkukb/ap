@@ -19,7 +19,15 @@ export function useDynamicCollapse(options: { duration?: number } = {}) {
     }
   });
 
-  return [active, caches] as const;
+  const toggleAll = (names: (string | number)[]) => {
+    if (active.value.length === 0) {
+      active.value = [...names];
+    } else {
+      active.value = [];
+    }
+  };
+
+  return [active, caches, toggleAll] as const;
 }
 
 export function useDynamicTabs(options: { duration?: number; activeIndex?: number } = {}) {
