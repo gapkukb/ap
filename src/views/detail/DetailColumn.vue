@@ -6,33 +6,20 @@
       'detail-col--decrease': changed === -1,
     }"
   >
-    <div class="">{{ label }}</div>
-    <div class="">{{ odds }}</div>
+    <div>{{ label }}</div>
+    <div>{{ odds }}</div>
   </div>
 </template>
 <script lang="ts" setup>
-import { defineProps, watch, ref, onBeforeUnmount } from 'vue';
-const changed = ref(0);
+import { defineProps, ref } from 'vue';
+import { useOddsWatch } from './hooks';
+
 const props = defineProps({
   label: { type: String },
   odds: { type: Number, default: 0 },
 });
-let timer = 0;
-watch(
-  () => props.odds,
-  (newVal, oldVal) => {
-    clearTimeout(timer);
-    if (!oldVal) return;
-    changed.value = newVal > oldVal ? 1 : -1;
-    timer = setTimeout(() => {
-      changed.value = 0;
-    }, 1000);
-  }
-);
 
-onBeforeUnmount(() => {
-  clearTimeout(timer);
-});
+const changed = useOddsWatch(() => props.odds);
 </script>
 
 <style lang="scss" scoped>
