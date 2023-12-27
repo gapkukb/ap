@@ -13,7 +13,7 @@
     "useDefineForClassFields": true,
     "sourceMap": true,
     "baseUrl": ".",
-    "types": ["webpack-env"],
+    "types": ["webpack-env", "@ttou/vant2-typings/package", "@ttou/vant2-typings/vue", "@ttou/vant2-typings/refs"],
     "paths": {
       "@/*": ["src/*"]
     },
