@@ -47,6 +47,9 @@
         </van-collapse>
       </van-tab>
     </van-tabs>
+    <dragger>
+      <button style="position: fixed; right: 10px; bottom: 40px">213</button>
+    </dragger>
   </div>
 </template>
 <script lang="ts" setup>
@@ -55,6 +58,7 @@ import Column from './DetailColumn.vue';
 import data from './mock';
 import { useTabs } from './utils';
 import { ref } from 'vue';
+import Dragger from '../Dragger.vue';
 const [collapseActiveName, collapseCacheNames, toggleAll] = useDynamicCollapse();
 const tabs = useTabs(data.markets);
 // const tabs = Array.from({ length: 20 }).map((_, i) => [i.toString(), i]);

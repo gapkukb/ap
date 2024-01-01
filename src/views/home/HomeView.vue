@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <div class="grid grid-cols-[auto_1fr_auto]">
+    <div @click="store.test.changeA()">{{ store.test.a }}</div>
     <van-tabs
       v-model="dateActive"
       animated
-      dot
+      :ellipsis="false"
+      class="min-w-0"
     >
-      <template #nav-left> 123 </template>
-      <template #nav-right> <bet-mode-swicher /> </template>
       <van-tab
         v-for="date in dateTabs"
         :key="date"
@@ -46,7 +46,7 @@
             />
           </svg>
           <svg
-            v-if="date === 2"
+            v-if="date === 1"
             xmlns="http://www.w3.org/2000/svg"
             width="157"
             height="36"
@@ -86,26 +86,11 @@
               fill="#111111"
             />
           </svg>
+          <span v-else>{{ date }}</span>
         </template>
       </van-tab>
     </van-tabs>
-    <van-tabs
-      v-model="active"
-      animated
-      dot
-    >
-      <van-tab
-        v-for="(tab, index) in tabs"
-        :key="tab.label"
-        badge="3"
-      >
-        <template #title> <van-icon name="more-o" /> {{ tab.label }} </template>
-        <Matches v-if="index === active" />
-      </van-tab>
-    </van-tabs>
-    <orders-entrance />
-    <orders />
-    <orders-result />
+    <bet-mode-swicher />
   </div>
 </template>
 
@@ -121,8 +106,11 @@ import BetModeSwicher from './BetModeSwicher.vue';
 import OrdersEntrance from './OrdersEntrance.vue';
 import Orders from './Orders.vue';
 import OrdersResult from './OrdersResult.vue';
+import store from './store';
 
-const dateTabs = [0, 1, 2];
+console.log(store.test);
+
+const dateTabs = [0, 1, 'aaaaaaaaaaaaa', 'bbbbbbbbbbbbbbb'];
 const tabs = [{ label: 'Basketball' }, { label: 'E-Sports' }, { label: 'Volleyball' }, { label: 'Football' }, { label: 'Basketball1' }, { label: 'Basketball3' }, { label: 'Basketball2' }];
 const dateActive = ref(0);
 const active = ref(0);

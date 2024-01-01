@@ -2,7 +2,10 @@ import Vue from 'vue';
 import { matches } from './mock';
 import { Order } from './types';
 import { wrapMatches } from './helper';
-import globalStore from '@/store';
+import { Single, Parlay } from '../orders';
+
+let single: Single;
+let parlay: Parlay;
 
 const store = Vue.observable({
   acceptedAnyOdds: true,
@@ -14,7 +17,22 @@ const store = Vue.observable({
   // 比赛信息
   matches: wrapMatches(matches),
   // 订单区，存放用户的待提交订单
-  orders: <Order[]>[],
+  get orders() {
+    return this._orders.orders;
+  },
+
+  set orders(value: Order[]) {
+    this._orders.orders = value;
+  },
+
+  get _orders(): Single | Parlay {
+    if (this.ParlayMode) {
+      parlay ??= Vue.observable(new Parlay());
+      return parlay;
+    }
+    single ??= Vue.observable(new Single());
+    return single;
+  },
   // 删除订单
   remove(index: number) {
     this.orders.splice(index, 1);
