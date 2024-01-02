@@ -1,20 +1,20 @@
 <template>
   <div class="grid grid-cols-[auto_1fr_auto]">
-    <div @click="store.test.changeA()">{{ store.test.a }}</div>
     <van-tabs
-      v-model="dateActive"
+      v-model="store.dateActive"
       animated
       :ellipsis="false"
       class="min-w-0"
     >
       <van-tab
-        v-for="date in dateTabs"
-        :key="date"
-        badge="3"
+        v-for="date in store.dateTabs"
+        :key="date.id"
+        :badge="date.count"
+        :name="date.id"
       >
         <template #title>
           <svg
-            v-if="date === 0"
+            v-if="date.id === 0"
             xmlns="http://www.w3.org/2000/svg"
             width="56"
             height="26"
@@ -46,7 +46,7 @@
             />
           </svg>
           <svg
-            v-if="date === 1"
+            v-else-if="date.id === 1"
             xmlns="http://www.w3.org/2000/svg"
             width="157"
             height="36"
@@ -86,11 +86,12 @@
               fill="#111111"
             />
           </svg>
-          <span v-else>{{ date }}</span>
+          <span v-else>{{ date.label }}</span>
         </template>
       </van-tab>
     </van-tabs>
     <bet-mode-swicher />
+    {{ store.dateActive }}
   </div>
 </template>
 
@@ -100,20 +101,14 @@ export default {
 };
 </script>
 <script setup lang="ts">
-import { ref } from 'vue';
-import Matches from './Matches.vue';
+import { onBeforeUnmount } from 'vue';
 import BetModeSwicher from './BetModeSwicher.vue';
-import OrdersEntrance from './OrdersEntrance.vue';
-import Orders from './Orders.vue';
-import OrdersResult from './OrdersResult.vue';
 import store from './store';
+store.init();
 
-console.log(store.test);
-
-const dateTabs = [0, 1, 'aaaaaaaaaaaaa', 'bbbbbbbbbbbbbbb'];
-const tabs = [{ label: 'Basketball' }, { label: 'E-Sports' }, { label: 'Volleyball' }, { label: 'Football' }, { label: 'Basketball1' }, { label: 'Basketball3' }, { label: 'Basketball2' }];
-const dateActive = ref(0);
-const active = ref(0);
+onBeforeUnmount(() => {
+  store.desotry();
+});
 </script>
 <style lang="scss" scoped>
 ::v-deep {

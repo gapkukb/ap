@@ -5,11 +5,22 @@ const AutoImport = require('unplugin-auto-import/webpack').default;
 const Components = require('unplugin-vue-components/webpack').default;
 const { VantResolver } = require('unplugin-vue-components/resolvers');
 
-console.log(AutoImport);
-
 module.exports = defineConfig({
   transpileDependencies: true,
-
+  devServer: {
+    proxy: {
+      '/api': {
+        target: 'https://laroplus.c66uat.com',
+        changeOrigin: true,
+        pathRewrite: { '^/api': '/_front_api_' },
+        onProxyRes: function (proxyRes, req, res) {
+          let target = 'https://laroplus.c66uat.com';
+          let realUrl = target + req.url;
+          proxyRes.headers['x-real-url'] = realUrl;
+        },
+      },
+    },
+  },
   chainWebpack: (config) => {
     config.module.rules.delete('svg');
 

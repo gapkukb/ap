@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { Matchs, RawMatchs, Selection, Market, MatchStatus, RawMatch } from './types';
+import { Matchs, RawMatchs, Selection, Market, MatchStatus, RawMatch, DateTab, SportTab } from './types';
 import isToday from 'dayjs/plugin/isToday';
 import isTomorrow from 'dayjs/plugin/isTomorrow';
 
@@ -99,4 +99,68 @@ export function getOddsRange(selections: Selection[], key: string) {
   const oddsRange = selections.find((selection) => selection.key === key)?.allPrice.oddRange;
 
   return oddsRange ?? 0;
+}
+
+export function createDateTabs(): DateTab[] {
+  return [
+    {
+      label: 'Live',
+      id: 0,
+      count: 0,
+      display: false,
+    },
+    {
+      label: 'IN-PLAY',
+      id: 1,
+      count: 0,
+      display: true,
+    },
+    {
+      label: 'TODAY&TOMORROW',
+      id: 11,
+      count: 0,
+      display: true,
+    },
+    {
+      label: 'EARLY',
+      id: 12,
+      count: 0,
+      display: true,
+    },
+  ];
+}
+
+export function createSportTabs(): SportTab[] {
+  return [
+    {
+      label: 'Basketball',
+      icon: require('./icon-basketball.png'),
+      activeIcon: require('./icon-basketball-s.png'),
+      count: 0,
+    },
+    {
+      label: 'Volleyball',
+      icon: require('./icon-basketball.png'),
+      activeIcon: require('./icon-basketball-s.png'),
+      count: 0,
+    },
+    {
+      label: 'Football',
+      icon: require('./icon-basketball.png'),
+      activeIcon: require('./icon-basketball-s.png'),
+      count: 0,
+    },
+    {
+      label: 'Tennis',
+      icon: require('./icon-basketball.png'),
+      activeIcon: require('./icon-basketball-s.png'),
+      count: 0,
+    },
+    {
+      label: 'Boxing',
+      icon: require('./icon-basketball.png'),
+      activeIcon: require('./icon-basketball-s.png'),
+      count: 0,
+    },
+  ];
 }

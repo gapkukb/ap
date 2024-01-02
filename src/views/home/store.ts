@@ -1,42 +1,39 @@
 import Vue from 'vue';
 import { matches } from './mock';
-import { Order } from './types';
-import { wrapMatches } from './helper';
-import { Single, Parlay } from '../orders';
+import { Live, Order } from './types';
+import { Polling } from '../polling';
+import { createDateTabs, wrapMatches, createSportTabs } from './helper';
+import SingleMode from '../SingleMode';
+import ParlayMode from '../ParlayMode';
 
-let single: Single;
-let parlay: Parlay;
+let mode: SingleMode | ParlayMode | null = null;
 
-const store = Vue.observable({
-  acceptedAnyOdds: true,
-  ParlayMode: false,
-  displayOrderView: false,
-  stake: '',
+export class Store {
+  acceptedAnyOdds = true;
+  ParlayMode = false;
+  displayOrderView = false;
+  stake = '';
   // 提交的订单id，用于查询订单结果状态
-  orderId: '',
+  orderId = '';
   // 比赛信息
-  matches: wrapMatches(matches),
+  matches = wrapMatches(matches);
   // 订单区，存放用户的待提交订单
   get orders() {
-    return this._orders.orders;
-  },
+    return this.mode.orders;
+  }
 
   set orders(value: Order[]) {
-    this._orders.orders = value;
-  },
+    this.mode.orders = value;
+  }
 
-  get _orders(): Single | Parlay {
-    if (this.ParlayMode) {
-      parlay ??= Vue.observable(new Parlay());
-      return parlay;
-    }
-    single ??= Vue.observable(new Single());
-    return single;
-  },
+  get mode() {
+    mode ??= Vue.observable(this.ParlayMode ? new ParlayMode(this) : new SingleMode(this));
+    return mode;
+  }
   // 删除订单
   remove(index: number) {
     this.orders.splice(index, 1);
-  },
+  }
   // 添加订单
   add(order: Order) {
     if (this.ParlayMode) {
@@ -54,11 +51,11 @@ const store = Vue.observable({
       this.orders = [order];
       this.displayOrderView = true;
     }
-  },
+  }
   // 清空订单
   clear() {
     this.orders = [];
-  },
+  }
   get ordersErrorMessage(): string {
     if (this.ParlayMode) {
       if (this.orders.length < 2) {
@@ -72,7 +69,7 @@ const store = Vue.observable({
       return 'No bets here';
     }
     return '';
-  },
+  }
   get inputErrorMessage(): string | undefined {
     //todo: 判断小于最小值 大于最大值 超出余额
     if (this.payout < 10) {
@@ -84,18 +81,18 @@ const store = Vue.observable({
     if (this.payout > 1000) {
       return 'but at most 1000';
     }
-  },
+  }
   get disabled() {
     return !!this.ordersErrorMessage || !!this.stake || !!this.inputErrorMessage;
-  },
+  }
   get displayResultView() {
     return !!this.orderId;
-  },
+  }
   set displayResultView(value) {
     this.orderId = '';
     this.stake = '';
     this.clear();
-  },
+  }
 
   get payout(): number {
     const stake = Number(this.stake);
@@ -106,7 +103,30 @@ const store = Vue.observable({
     }, 0);
 
     return Number(total.toFixed(2));
-  },
-});
+  }
 
+  dateActive = 0;
+  lives: Live[] = [];
+  _dateTabs = createDateTabs();
+  sportActive = '';
+  sportTabs = createSportTabs();
+  get dateTabs() {
+    return this._dateTabs.filter((tab) => tab.display);
+  }
+
+  async init() {
+    const polling1 = new Polling(this.mode.queryDates, 3000, this.mode);
+    const polling2 = new Polling(this.mode.queryLives, 3000, this.mode);
+    const polling3 = new Polling(this.mode.queryMatches, 3000, this.mode);
+
+    setTimeout(() => {
+      polling1.stop();
+    }, 10000);
+  }
+
+  desotry() {
+    mode = null;
+  }
+}
+const store = Vue.observable(new Store());
 export default store;
