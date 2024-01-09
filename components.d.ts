@@ -20,7 +20,7 @@ declare module 'vue' {
     Listitem: typeof import('./src/views/home/Listitem.vue')['default']
     Matche: typeof import('./src/views/home/Matche.vue')['default']
     Matches: typeof import('./src/views/home/Matches.vue')['default']
-    Mock: typeof import('./src/views/home/mock.ts')['default']
+    Mock: typeof import('./src/views/detail/mock.ts')['default']
     Odds: typeof import('./src/views/home/Odds.vue')['default']
     OddsColumn: typeof import('./src/views/home/OddsColumn.vue')['default']
     Orders: typeof import('./src/views/orders.ts')['default']

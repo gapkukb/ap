@@ -1,6 +1,6 @@
 <template>
   <div class="grid grid-cols-[auto_1fr_auto]">
-    <van-tabs
+    <!-- <van-tabs
       v-model="store.dateActive"
       animated
       :ellipsis="false"
@@ -90,14 +90,44 @@
         </template>
       </van-tab>
     </van-tabs>
-    <bet-mode-swicher />
-    {{ store.dateActive }}
+    <bet-mode-swicher /> -->
+
+    <div class="test test1"></div>
+    <div class="test test2"></div>
+
+    <svg
+      width="200"
+      height="200"
+      opacity="0"
+      viewBox="0 0 22 28"
+      enable-background="new 0 0 22 28"
+      xml:space="preserve"
+    >
+      <defs>
+        <clipPath id="myClip">
+          <path
+            d="M10.5151 0.000365257C10.2521 0.00583211 10.0017 0.116635 9.81791 0.308896L0.287722 10.2513C-0.101489 10.6571 -0.0950097 11.3083 0.302194 11.7059C0.699397 12.1035 1.33691 12.0969 1.72612 11.6911L20.307 11.7245C20.5705 11.9748 20.9447 12.0626 21.2886 11.9546C21.6325 11.8467 21.894 11.5595 21.9745 11.2013C22.0549 10.8431 21.9422 10.4682 21.6787 10.2179L11.2236 0.275472C11.0311 0.0920003 10.7757 -0.0068092 10.5126 0.000365257H10.5151Z"
+            fill="#31B900"
+          />
+          <path
+            opacity="0.502465"
+            d="M10.5151 16.0004C10.2521 16.0058 10.0017 16.1166 9.81791 16.3089L0.287722 26.2513C-0.101489 26.6571 -0.0950097 27.3083 0.302194 27.7059C0.699397 28.1035 1.33691 28.0969 1.72612 27.6911L20.307 27.7245C20.5705 27.9748 20.9447 28.0626 21.2886 27.9546C21.6325 27.8467 21.894 27.5595 21.9745 27.2013C22.0549 26.8431 21.9422 26.4682 21.6787 26.2179L11.2236 16.2755C11.0311 16.092 10.7757 15.9932 10.5126 16.0004H10.5151Z"
+            fill="#31B900"
+          />
+        </clipPath>
+      </defs>
+    </svg>
   </div>
 </template>
 
 <script lang="ts">
 export default {
   name: 'Home',
+  methods: {
+    abc() {
+      alert(1);
+    },
+  },
 };
 </script>
 <script setup lang="ts">
@@ -121,6 +151,43 @@ onBeforeUnmount(() => {
   }
   .van-tab--active {
     color: #ff5800;
+  }
+}
+
+.test {
+  --point1: 42%;
+  --point2: 58%;
+  --size: 52px;
+  width: var(--size);
+  height: calc(var(--size) * 1.2727);
+  align-self: flex-start;
+  background-position-y: 0%;
+  background-image: linear-gradient(to top, var(--bg-color) var(--point1), transparent var(--point2));
+  //   background-image: linear-gradient(to top, var(--bg-color), transparent 33%, var(--bg-color) 66%, transparent 100%);
+  background-size: 400% 400%;
+  clip-path: polygon(0 0, 50% 0, 100% var(--point1), 50% var(--point1), 50% var(--point2), 100% 100%, 0 100%, 50% var(--point2), 50% var(--point1), 0 var(--point1), 50% 0);
+  animation: increase 1s linear forwards infinite;
+  animation-iteration-count: 2;
+}
+
+.test1 {
+  --bg-color: #36b896;
+}
+.test2 {
+  --bg-color: red;
+  transform: scale(-1);
+}
+
+@keyframes increase {
+  0% {
+    background-position-y: 0%;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    background-position-y: 100%;
+    // opacity: 0;
   }
 }
 </style>
